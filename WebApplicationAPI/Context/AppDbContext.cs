@@ -11,6 +11,7 @@ namespace WebApplicationAPI.Context
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<UsuarioAutenticado> UsuarioAutenticados { get; set; }
 
         // Modificar el tipo de datos
         protected override void OnModelCreating(ModelBuilder modelBuilder)
