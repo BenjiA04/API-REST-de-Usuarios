@@ -1,4 +1,4 @@
-# 📘 API REST de implementando entidades productos - ASP.NET Core + Entity Framework
+# 📘 API REST implementando entidades productos - ASP.NET Core + Entity Framework
 
 ---
 
