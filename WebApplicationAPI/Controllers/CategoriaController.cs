@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationAPI.Context;
+using WebApplicationAPI.Models;
+using WebApplicationAPI.Models.DTO;
 
-namespace WebApplicationAPI.Models.DTO
+namespace WebApplicationAPI.Controllers
 {
     [Route("api/[controller]")]
     [Authorize]
