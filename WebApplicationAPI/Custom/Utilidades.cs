@@ -17,15 +17,17 @@ namespace WebApplicationAPI.Custom
 
         public string encriptarSHA256(string texto)
         {
-            using(SHA256 sha256Hash = SHA256.Create())
+            // Crear el algoritmo SHA-256
+            using (SHA256 sha256Hash = SHA256.Create())
             {
-                // Computar hash
+                // Convertir el texto a bytes y calcular el hash256
                 byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(texto));
 
                 // Convertir el array de bytes a string
                 StringBuilder builder = new StringBuilder();
                 for (int i = 0; i < bytes.Length; i++)
                 {
+                    // Convierte a hexadecimal
                     builder.Append(bytes[i].ToString("X2"));
                 }
 

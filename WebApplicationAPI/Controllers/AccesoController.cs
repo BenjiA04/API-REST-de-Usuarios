@@ -26,7 +26,7 @@ namespace WebApplicationAPI.Controllers
 
         [HttpPost]
         [Route("Registrarse")]
-        public async Task<IActionResult> registrarUser(UsuarioDTO objeto)
+        public async Task<IActionResult> RegistrarUser(UsuarioDTO objeto)
         {
             var modeloUsuario = new UsuarioAutenticado
             {
@@ -53,7 +53,7 @@ namespace WebApplicationAPI.Controllers
                                           .FirstOrDefaultAsync();
 
             if (usuarioEncontrado == null)
-                return StatusCode(StatusCodes.Status200OK, new { isSuccess = false, token = "" });
+                return StatusCode(StatusCodes.Status200OK, new { isSuccess = false, message = "Usuario no encontrado o no existe." });
             else
                 return StatusCode(StatusCodes.Status200OK, new { isSuccess = true, token = _utilidades.generarJWT(usuarioEncontrado) });
         }
@@ -61,8 +61,9 @@ namespace WebApplicationAPI.Controllers
         [HttpPost]
         [Route("RefrescarToken")]
         [Authorize]
-        public async Task<IActionResult> refrezcarToken()
+        public async Task<IActionResult> RefrezcarToken()
         {
+            // Recupera el nombre de usuario contenido en el token JWT autenticado.
             var nombreUsuario = User.Identity?.Name;
 
             if (string.IsNullOrEmpty(nombreUsuario))

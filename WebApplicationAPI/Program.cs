@@ -1,11 +1,12 @@
-using Microsoft.EntityFrameworkCore;
-using WebApplicationAPI.Context;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using WebApplicationAPI.Context;
 using WebApplicationAPI.Custom;
 using WebApplicationAPI.Models;
-using System.Text;
-using Microsoft.OpenApi.Models;
+using WebApplicationAPI.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,8 @@ builder.Services.AddAuthentication(config =>
         (Encoding.UTF8.GetBytes(builder.Configuration["settings:secretkey"]!))
     };
 });
+
+builder.Services.AddSingleton<IFileData, FileData>();
 
 var app = builder.Build();
 

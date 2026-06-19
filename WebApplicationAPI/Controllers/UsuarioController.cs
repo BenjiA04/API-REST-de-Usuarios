@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApplicationAPI.Context;
 using WebApplicationAPI.Models;
+using WebApplicationAPI.Service;
 
 namespace WebApplicationAPI.Controllers
 {
@@ -15,10 +16,12 @@ namespace WebApplicationAPI.Controllers
     public class UsuarioController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IFileData _filedata;
 
-        public UsuarioController(AppDbContext contexto)
+        public UsuarioController(AppDbContext contexto, IFileData fileData)
         {
             _context = contexto;
+            _filedata = fileData;
         }
 
         // Metodo Post
@@ -35,6 +38,7 @@ namespace WebApplicationAPI.Controllers
                 {
                     _context.Usuarios.Add(usuario);
                     await _context.SaveChangesAsync();
+                    await _filedata.Create(usuario); // Guardar en archivo
                     return CreatedAtAction("GetUsuario", new { id = usuario.Id });
                 }
             }
@@ -49,6 +53,10 @@ namespace WebApplicationAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuario()
         {
+            if (!_context.Usuarios.Any())
+            {
+                return Ok("No existen usuarios registrados.");
+            }
             return await _context.Usuarios.ToListAsync();
         }
 
@@ -65,12 +73,22 @@ namespace WebApplicationAPI.Controllers
             return usuario;
         }
 
-
         private bool _CorreoDuplicado(string correo)
         {
             return _context.Usuarios.Any(u => u.Correo == correo);
         }
 
+        [HttpGet("FileData")]
+        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarioFileData()
+        {
+            var usuario = await _filedata.Read();
+
+            if (!usuario.Any())
+            {
+                return Ok("No existen usuarios registrados.");
+            }
+            return Ok(usuario);
+        }
 
         // Metodo put
         [HttpPut("{id}")]
