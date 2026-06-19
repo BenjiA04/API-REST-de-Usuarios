@@ -35,6 +35,7 @@ Este endpoint permite consultar los usuarios almacenados en el archivo usuarios.
 ```
 
 Ejemplo de consulta:
+
 <img width="1792" height="82" alt="image" src="https://github.com/user-attachments/assets/e4742451-84e5-4bf1-9821-f86fbc157888" />
 <img width="1798" height="780" alt="image" src="https://github.com/user-attachments/assets/a1dc11d4-912a-4c47-b22a-40fe2dc98555" />
 
