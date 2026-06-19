@@ -1,45 +1,56 @@
-# 📘 API REST implementando entidades productos - ASP.NET Core + Entity Framework
+# 📘 API REST implementando persistencia de datos con archivos - ASP.NET Core + Entity Framework
 
 ---
 
 ## 📌 Descripción
-El sistema permite administrar productos, proveedores y categorías, además de realizar consultas estadísticas y filtros personalizados sobre los 
-productos registrados.
-
-## Endpoints Consulta Especiales
-### 🔹 Estadísticas de Productos
-Endpoint que devuelve:
-
-- Producto con el precio más alto.
-- Producto con el precio más bajo.
-- Suma total de los precios de todos los productos.
-- Precio promedio de todos los productos.
-<img width="1815" height="690" alt="image" src="https://github.com/user-attachments/assets/9f8a7b30-6d22-4d62-8e78-3d4cbad1d107" />
-<img width="1863" height="838" alt="image" src="https://github.com/user-attachments/assets/3ca946b3-5d9e-46eb-80f3-a43549463d0a" />
-
-
-### 🔹 Productos por Categoría
-Permite obtener todos los productos pertenecientes a una categoría específica.
-<img width="1872" height="822" alt="image" src="https://github.com/user-attachments/assets/3c5fe474-1e82-4476-b4f6-bfb4aa4a877a" />
-<img width="1858" height="820" alt="image" src="https://github.com/user-attachments/assets/8544da78-c524-4534-9c3d-c51e119e0aef" />
-
-
-### 🔹 Productos por Proveedor
-Permite obtener todos los productos suministrados por un proveedor específico.
-<img width="1842" height="676" alt="image" src="https://github.com/user-attachments/assets/74921ce4-224c-4fb6-a167-daff3eaa648c" />
-<img width="1861" height="817" alt="image" src="https://github.com/user-attachments/assets/537f75fb-75f7-4ab8-a049-71275cb06c6f" />
-
-
-### 🔹 Cantidad Total de Productos
-Permite conocer la cantidad total de productos registrados en el sistema.
-<img width="1847" height="840" alt="image" src="https://github.com/user-attachments/assets/e14aeaa4-5762-4234-9c3a-0a0655eb9b16" />
-
+El sistema permite registrar usuarios en la base de datos y, adicionalmente, almacenar un registro serializado de cada usuario en un archivo de texto llamado `usuarios.txt`.
 
 ---
 
 ## 🚀 Implementación
+Se creó una carpeta llamada Service que contiene la interfaz `IFileData` y la clase `FileData` que implementa dicha interfaz, encargadas de gestionar la persistencia de datos en archivos para luego cargarlos por medio del endpoint GET `/api/Usuario/FileData`..
 
-Las consultas especiales fueron desarrolladas utilizando LINQ y expresiones Lambda para optimizar el acceso a los datos y mantener un código limpio y 
-fácil de mantener.
+Cada vez que se registra un usuario mediante el endpoint POST, el sistema:
 
-Además, se utilizaron DTOs para evitar exponer directamente las entidades y prevenir problemas de serialización relacionados con las relaciones entre tablas.
+- Guarda el usuario en la base de datos.
+- Serializa la información del usuario.
+- Almacena el registro en el archivo usuarios.txt.
+
+Implementación dentro del método POST:
+
+<img width="682" height="442" alt="image" src="https://github.com/user-attachments/assets/25e88c14-f053-4c51-aeeb-1c085210bc48" />
+
+---
+
+## Endpoints Consulta de archivo
+Se agregó el endpoint:
+```http
+GET /api/Usuario/FileData
+```
+
+El Endpoints muestra los usuarios en el archivo, en caso de estar vacio o no existir mostrara el siguiente mensaje 
+Este endpoint permite consultar los usuarios almacenados en el archivo usuarios.txt. Si el archivo no existe o no contiene registros, el sistema devolverá el siguiente mensaje:
+```JSON
+"No existen usuarios registrados."
+```
+
+Ejemplo de consulta:
+<img width="1792" height="82" alt="image" src="https://github.com/user-attachments/assets/e4742451-84e5-4bf1-9821-f86fbc157888" />
+<img width="1798" height="780" alt="image" src="https://github.com/user-attachments/assets/a1dc11d4-912a-4c47-b22a-40fe2dc98555" />
+
+Los usuarios son almacenados de forma serializada dentro del archivo:
+
+<img width="1880" height="217" alt="image" src="https://github.com/user-attachments/assets/3133a7ed-e99c-46ee-8dd7-74c2dec1358a" />
+
+---
+
+## Otros cambios menores implementados:
+-- Cuando la base de datos no contiene registros en lugar de retornar una lista vacía el endpoint devuelve el mensaje: 
+```JSON
+"No existen usuarios registrados."
+```
+
+-- Se mejoró la validación de inicio de sesión. Si las credenciales no coinciden con ningún usuario registrado, el sistema responde con el mensaje:
+```JSON
+"Usuario no encontrado o no existe."
+```
