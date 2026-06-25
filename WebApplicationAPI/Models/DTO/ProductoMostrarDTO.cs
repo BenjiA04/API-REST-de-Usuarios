@@ -1,6 +1,6 @@
 ﻿namespace WebApplicationAPI.Models.DTO
 {
-    public class ProductoDTO
+    public class ProductoMostrarDTO
     {
         public int Id { get; set; }
         public string Nombre { get; set; }

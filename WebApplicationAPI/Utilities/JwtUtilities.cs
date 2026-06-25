@@ -7,10 +7,10 @@ using WebApplicationAPI.Models;
 
 namespace WebApplicationAPI.Custom
 {
-    public class Utilidades
+    public class JwtUtilities
     {
         private readonly IConfiguration _config;
-        public Utilidades(IConfiguration config)
+        public JwtUtilities(IConfiguration config)
         {
             _config = config;
         }

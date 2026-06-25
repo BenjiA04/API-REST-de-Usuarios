@@ -17,8 +17,8 @@ namespace WebApplicationAPI.Controllers
     public class AccesoController : ControllerBase
     {
         private readonly AppDbContext _context;
-        private readonly Utilidades _utilidades;
-        public AccesoController(AppDbContext context, Utilidades utilidades)
+        private readonly JwtUtilities _utilidades;
+        public AccesoController(AppDbContext context, JwtUtilities utilidades)
         {
             _context = context;
             _utilidades = utilidades;
@@ -26,7 +26,7 @@ namespace WebApplicationAPI.Controllers
 
         [HttpPost]
         [Route("Registrarse")]
-        public async Task<IActionResult> RegistrarUser(UsuarioDTO objeto)
+        public async Task<IActionResult> RegistrarUser(UsuarioAutenticadoDTO objeto)
         {
             var modeloUsuario = new UsuarioAutenticado
             {

@@ -22,28 +22,28 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ProductoDTO>> PostProducto(Producto productos)
+        public async Task<ActionResult<ProductoCrearDTO>> PostProducto(ProductoCrearDTO dto)
         {
-            var categoriaExiste = await _context.Categorías.AnyAsync(c => c.Id == productos.CategoriaId);
-            var proveedorExiste = await _context.Proveedores.AnyAsync(p => p.Id == productos.ProveedorId);
-
-            var dto = new Producto
-            {
-                Nombre = productos.Nombre,
-                Precio = productos.Precio,
-                Stock = productos.Stock,
-                CategoriaId = productos.CategoriaId,
-                ProveedorId = productos.ProveedorId
-            };
+            var categoriaExiste = await _context.Categorías.AnyAsync(c => c.Id == dto.CategoriaId);
+            var proveedorExiste = await _context.Proveedores.AnyAsync(p => p.Id == dto.ProveedorId);
 
             if (categoriaExiste == null || proveedorExiste == null)
                 return BadRequest("Categoría o proveedor no existen.");
 
+            var producto = new Producto
+            {
+                Nombre = dto.Nombre,
+                Precio = dto.Precio,
+                Stock = dto.Stock,
+                CategoriaId = dto.CategoriaId,
+                ProveedorId = dto.ProveedorId
+            };
+
             try
             {
-                _context.Productos.Add(dto);
+                _context.Productos.Add(producto);
                 await _context.SaveChangesAsync();
-                return CreatedAtAction("GetProducto", new { id = dto.Id });
+                return CreatedAtAction("GetProducto", new { id = producto.Id });
             }
             catch (DbUpdateException)
             {
@@ -73,7 +73,7 @@ namespace WebApplicationAPI.Controllers
             if (maximo == null)
                 return NotFound();
 
-            var productoMasCaro = new ProductoDTO
+            var productoMasCaro = new ProductoMostrarDTO
             {
                 Id = maximo.Id,
                 Nombre = maximo.Nombre,
@@ -83,7 +83,7 @@ namespace WebApplicationAPI.Controllers
                 Proveedor = maximo.Proveedor.Nombre
             };
 
-            var productoMasBarato = new ProductoDTO
+            var productoMasBarato = new ProductoMostrarDTO
             {
                 Id = minimo.Id,
                 Nombre = minimo.Nombre,
@@ -103,7 +103,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("BuscarPorCategoria/{categoria}")]
-        public async Task<ActionResult<IEnumerable<ProductoDTO>>> GetProductosPorCategoria(string categoria)
+        public async Task<ActionResult<IEnumerable<ProductoMostrarDTO>>> GetProductosPorCategoria(string categoria)
         {
             var categoriaBuscada = await _context.Productos
                                          .Include(p => p.Categoria)
@@ -111,7 +111,7 @@ namespace WebApplicationAPI.Controllers
                                          .Where(p => p.Categoria.Nombre == categoria)
                                          .ToListAsync();
 
-            var productosDTO = categoriaBuscada.Select(p => new ProductoDTO
+            var productosDTO = categoriaBuscada.Select(p => new ProductoMostrarDTO
             {
                 Id = p.Id,
                 Nombre = p.Nombre,
@@ -130,7 +130,7 @@ namespace WebApplicationAPI.Controllers
         }
 
         [HttpGet("BuscarPorProveedor/{proveedor}")]
-        public async Task<ActionResult<IEnumerable<ProductoDTO>>> GetProductosPorProveedor(string proveedor)
+        public async Task<ActionResult<IEnumerable<ProductoMostrarDTO>>> GetProductosPorProveedor(string proveedor)
         {
             var proveedorBuscado = await _context.Productos
                                          .Include(p => p.Categoria)
@@ -138,7 +138,7 @@ namespace WebApplicationAPI.Controllers
                                          .Where(p => p.Proveedor.Nombre == proveedor)
                                          .ToListAsync();
 
-            var productosDTO = proveedorBuscado.Select(p => new ProductoDTO
+            var productosDTO = proveedorBuscado.Select(p => new ProductoMostrarDTO
             {
                 Id = p.Id,
                 Nombre = p.Nombre,

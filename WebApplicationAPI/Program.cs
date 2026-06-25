@@ -48,7 +48,7 @@ builder.Services.AddDbContext<AppDbContext>(p => p.UseSqlServer("name=Connection
 
 
 // Configuar autentificacion de JWT
-builder.Services.AddSingleton<Utilidades>();
+builder.Services.AddSingleton<JwtUtilities>();
 
 builder.Services.AddAuthentication(config =>
 {
@@ -75,11 +75,9 @@ builder.Services.AddSingleton<IFileData, FileData>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

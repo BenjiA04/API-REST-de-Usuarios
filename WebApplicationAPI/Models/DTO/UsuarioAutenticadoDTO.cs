@@ -2,7 +2,7 @@
 
 namespace WebApplicationAPI.Models.DTO
 {
-    public class UsuarioDTO
+    public class UsuarioAutenticadoDTO
     {
         [Required(ErrorMessage = "El nombre de usuario es requerido")]
         public string nombreUsuario { get; set; }
